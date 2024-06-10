@@ -1,0 +1,7 @@
+<!-- res/drawable/rounded_popup_background.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@android:color/white" /> <!-- Background color -->
+    <corners android:radius="16dp" /> <!-- Corner radius -->
+    <padding android:left="16dp" android:right="16dp" android:top="16dp" android:bottom="16dp"/> <!-- Padding inside the popup -->
+    <stroke android:width="2dp" android:color="@android:color/darker_gray"/> <!-- Optional border stroke -->
+</shape>
