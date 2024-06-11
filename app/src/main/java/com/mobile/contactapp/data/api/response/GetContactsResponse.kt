@@ -29,5 +29,5 @@ data class ListContacts(
 	val phoneNumber: Int,
 
 	@field:SerializedName("email")
-	val createdAt: String,
+	val createdAt: String? = ""
 )

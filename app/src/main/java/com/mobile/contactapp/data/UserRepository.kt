@@ -1,11 +1,16 @@
 package com.mobile.contactapp.data
 
+import com.mobile.contactapp.data.api.response.DeleteContactResponse
+import com.mobile.contactapp.data.api.response.ListContacts
+import com.mobile.contactapp.data.api.response.LoginResponse
+import com.mobile.contactapp.data.api.response.LogoutResponse
+import com.mobile.contactapp.data.api.response.PostContactResponse
+import com.mobile.contactapp.data.api.response.PutContactResponse
+import com.mobile.contactapp.data.api.response.RegisterResponse
 import com.mobile.contactapp.data.api.retrofit.ApiService
 import com.mobile.contactapp.data.pref.UserModel
 import com.mobile.contactapp.data.pref.UserPreference
 import kotlinx.coroutines.flow.Flow
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
 
 class UserRepository private constructor(
     private val apiService: ApiService,
@@ -21,25 +26,45 @@ class UserRepository private constructor(
         return userPreference.getSession()
     }
 
-    suspend fun logout() {
-        userPreference.logout()
+    suspend fun register(name: String, email: String, password: String): RegisterResponse {
+        return apiService.register(name, email, password)
     }
 
-    suspend fun getContacts(token: String): List<com.mobile.contactapp.data.api.response.ListContacts>? {
+    suspend fun login(username: String, password: String): LoginResponse {
+        return apiService.login(username, password)
+    }
+
+    suspend fun logout(): LogoutResponse {
+        userPreference.logout()
+        return apiService.logout()
+    }
+
+    suspend fun getContacts(token: String): List<ListContacts>? {
         val response = apiService.getContacts()
         return if (!response.error!!) response.contacts else null
     }
 
-    suspend fun login(email: String, password: String): com.mobile.contactapp.data.api.response.LoginResponse {
-        return apiService.login(email, password)
+    suspend fun postContact(
+        firstName: String,
+        lastName: String,
+        email: String,
+        phoneNumber: Int
+    ): PostContactResponse {
+        return apiService.postContact(firstName, lastName, email, phoneNumber)
     }
 
-    suspend fun register(name: String, email: String, password: String): com.mobile.contactapp.data.api.response.RegisterResponse {
-        return apiService.register(name, email, password)
+    suspend fun putContact(
+        id: String,
+        firstName: String,
+        lastName: String,
+        email: String,
+        phoneNumber: Int
+    ): PutContactResponse  {
+        return apiService.putContacts(id, firstName, lastName, email, phoneNumber)
     }
 
-    suspend fun addStory(file: MultipartBody.Part, description: RequestBody): com.mobile.contactapp.data.api.response.AddContactResponse {
-        return apiService.addStory(file, description)
+    suspend fun deleteContact(id: String): DeleteContactResponse {
+        return apiService.deleteContact(id)
     }
 
     companion object {

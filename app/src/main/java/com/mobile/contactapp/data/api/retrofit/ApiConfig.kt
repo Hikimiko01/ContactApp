@@ -9,7 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiConfig {
     val BASE_URL = BuildConfig.BASE_URL
-    fun getApiService(token: String): com.mobile.contactapp.data.api.retrofit.ApiService {
+    fun getApiService(token: String): ApiService {
         val loggingInterceptor =
             HttpLoggingInterceptor().setLevel(
             if (BuildConfig.DEBUG)
@@ -30,10 +30,10 @@ object ApiConfig {
             .addInterceptor(authInterceptor)
             .build()
         val retrofit = Retrofit.Builder()
-            .baseUrl(com.mobile.contactapp.data.api.retrofit.ApiConfig.BASE_URL)
+            .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
-        return retrofit.create(com.mobile.contactapp.data.api.retrofit.ApiService::class.java)
+        return retrofit.create(ApiService::class.java)
     }
 }
