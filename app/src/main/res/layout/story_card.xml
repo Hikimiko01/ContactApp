@@ -12,16 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="8dp"
-        >
-
-        <ImageView
-            android:id="@+id/iv_item_photo"
-            android:layout_width="match_parent"
-            android:layout_height="156dp"
-            android:scaleType="centerCrop"
-            tools:src="@tools:sample/avatars"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp">
 
         <TextView
             android:id="@+id/tv_item_name"
@@ -31,18 +23,50 @@
             android:layout_marginTop="8dp"
             android:textSize="14sp"
             android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@+id/iv_item_photo"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
-            android:id="@+id/tv_item_desc"
+            android:id="@+id/tv_item_phoneNum"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/description"
-            android:textSize="12sp"
+            android:layout_marginTop="8dp"
+            android:text="@string/contacts_phoneNum"
+            android:textSize="11sp"
             app:layout_constraintTop_toBottomOf="@+id/tv_item_name"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"/>
+        
+        <TextView
+            android:id="@+id/tv_item_email"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@string/contacts_email"
+            android:textSize="11sp"
+            app:layout_constraintTop_toBottomOf="@id/tv_item_phoneNum"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <Button
+            android:id="@+id/contacts_edit_btn"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/ic_edit_24"
+            app:backgroundTint="@color/black"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/contacts_delete_btn"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <Button
+            android:id="@+id/contacts_delete_btn"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/ic_delete_outline_24"
+            app:backgroundTint="@color/black"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -12,7 +12,6 @@
     <string name="name">Nama</string>
     <string name="description">Lorem Ipsum</string>
     <string name="message_main_page">Selamat Datang di ContactApp!.</string>
-    <string name="greeting">Halo, %1$s</string>
     <string name="logout">Keluar</string>
     <string name="pass_error">Password tidak boleh kurang dari 8 karakter</string>
     <string name="email_error">Email harus mengandung @gmail.com</string>
@@ -22,7 +21,7 @@
     <string name="upload">Upload</string>
     <string name="error_occured">Mohon maaf, terjadi error</string>
     <string name="registered_email">Email tersebut sudah terdaftar. Yuk coba pakai email lain!</string>
-    <string name="login_success">Anda berhasil login. Sudah tidak sabar untuk stalking ya?</string>
+    <string name="login_success">Anda berhasil login. Yuk mulai simpan kontak kamu!</string>
     <string name="acc_not_found">Sepertinya akun kamu belum terdaftar. Yuk daftar dulu!</string>
     <string name="field_not_filled">Ada yang belum kamu isi nih, yuk di cek lagi!</string>
     <string name="email">Email</string>
@@ -34,6 +33,7 @@
     <string name="last_name">Nama Belakang</string>
     <string name="phone_number">Nomor Telepon</string>
     <string name="save">Simpan</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="contacts_name">%1$s %2$s</string>
+    <string name="contacts_email">Email: %1$s</string>
+    <string name="contacts_phoneNum">Nomor Telepon: %1$s</string>
 </resources>

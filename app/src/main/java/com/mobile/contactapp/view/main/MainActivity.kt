@@ -78,7 +78,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         viewModel.contacts.observe(this) { contacts ->
-            Log.d("MainActivity", "Updating adapter with stories: $contacts")
+            Log.d("MainActivity", "Updating adapter with contacts: $contacts")
             itemAdapter.submitList(contacts)
             binding.loadingProgressBar.visibility = View.GONE
         }

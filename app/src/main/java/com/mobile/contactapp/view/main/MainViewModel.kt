@@ -1,5 +1,6 @@
 package com.mobile.contactapp.view.main
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -21,9 +22,11 @@ class MainViewModel(private val repository: com.mobile.contactapp.data.UserRepos
     fun getContacts(token: String){
         viewModelScope.launch {
             try {
-                val stories = repository.getContacts(token)
-                _contacts.value = stories ?: emptyList()
+                val contacts = repository.getContacts(token)
+                Log.d("MainViewModel", "Fetched contacts: $contacts")
+                _contacts.value = contacts
             } catch (e: Exception) {
+                Log.e("MainViewModel", "Error fetching contacts", e)
                 _contacts.value = emptyList()
             }
         }

@@ -39,9 +39,8 @@ class UserRepository private constructor(
         return apiService.logout()
     }
 
-    suspend fun getContacts(token: String): List<ListContacts>? {
-        val response = apiService.getContacts()
-        return if (!response.error!!) response.contacts else null
+    suspend fun getContacts(token: String): List<ListContacts> {
+        return apiService.getContacts().contacts
     }
 
     suspend fun postContact(
