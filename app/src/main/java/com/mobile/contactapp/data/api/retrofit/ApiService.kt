@@ -43,10 +43,7 @@ interface ApiService {
     @PUT("contact/{id}")
     suspend fun putContacts(
         @Path("id") id: String,
-        @Field("firstName") firstName: String,
-        @Field("lastName") lastName: String?,
-        @Field("email") email: String,
-        @Field("phoneNumber") phoneNumber: Int
+        @Body kontak: Contact
     ) : EditContactResponse
 
     @DELETE("contact/{id}")

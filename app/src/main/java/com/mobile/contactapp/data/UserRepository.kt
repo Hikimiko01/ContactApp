@@ -50,12 +50,9 @@ class UserRepository private constructor(
 
     suspend fun editContact(
         id: String,
-        firstName: String,
-        lastName: String,
-        email: String,
-        phoneNumber: Int
+        kontak: Contact
     ): EditContactResponse  {
-        return apiService.putContacts(id, firstName, lastName, email, phoneNumber)
+        return apiService.putContacts(id, kontak)
     }
 
     suspend fun deleteContact(id: String): DeleteContactResponse {

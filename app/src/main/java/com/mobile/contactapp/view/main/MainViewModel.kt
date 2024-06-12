@@ -59,6 +59,19 @@ class MainViewModel(private val repository: UserRepository) : ViewModel() {
         }
     }
 
+    fun editContact(id: String, kontak: Contact) {
+        viewModelScope.launch {
+            try {
+                Log.d("MainViewModel", "Editing contact: $id")
+                repository.editContact(id, kontak)
+                val updatedContacts = repository.getContacts(repository.getSession().asLiveData().value?.token ?: "")
+                _contacts.value = updatedContacts
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
     fun logout() {
         viewModelScope.launch {
             repository.logout()

@@ -19,6 +19,7 @@ import com.mobile.contactapp.data.pref.Contact
 import com.mobile.contactapp.data.pref.ContactItem
 import com.mobile.contactapp.databinding.ActivityMainBinding
 import com.mobile.contactapp.databinding.AddContactBinding
+import com.mobile.contactapp.databinding.EditContactBinding
 import com.mobile.contactapp.view.ViewModelFactory
 import com.mobile.contactapp.view.login.LoginActivity
 import kotlinx.coroutines.launch
@@ -63,7 +64,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
-        itemAdapter = ItemAdapter(viewModel)
+        itemAdapter = ItemAdapter(viewModel, this, this)
         binding.rvStory.layoutManager = LinearLayoutManager(this)
         binding.rvStory.adapter = itemAdapter
     }
@@ -91,14 +92,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadContact(token: String) {
+    fun loadContact(token: String) {
         binding.loadingProgressBar.visibility = View.VISIBLE
         lifecycleScope.launch {
             viewModel.getContacts(token)
         }
     }
 
-    private fun addContactPopUp(){
+    private fun addContactPopUp() {
         binding.fabAddContact.setOnClickListener {
 
             val popupBinding = AddContactBinding.inflate(layoutInflater)

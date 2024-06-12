@@ -36,4 +36,5 @@
     <string name="contacts_name">%1$s %2$s</string>
     <string name="contacts_email">Email: %1$s</string>
     <string name="contacts_phoneNum">Nomor Telepon: %1$s</string>
+    <string name="edit_kontak">Edit Kontak</string>
 </resources>
