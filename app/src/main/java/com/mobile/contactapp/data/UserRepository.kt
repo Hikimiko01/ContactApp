@@ -3,7 +3,6 @@ package com.mobile.contactapp.data
 import com.mobile.contactapp.data.api.response.DeleteContactResponse
 import com.mobile.contactapp.data.api.response.ListContacts
 import com.mobile.contactapp.data.api.response.LoginResponse
-import com.mobile.contactapp.data.api.response.LogoutResponse
 import com.mobile.contactapp.data.api.response.PostContactResponse
 import com.mobile.contactapp.data.api.response.PutContactResponse
 import com.mobile.contactapp.data.api.response.RegisterResponse
@@ -34,9 +33,8 @@ class UserRepository private constructor(
         return apiService.login(username, password)
     }
 
-    suspend fun logout(): LogoutResponse {
+    suspend fun logout(){
         userPreference.logout()
-        return apiService.logout()
     }
 
     suspend fun getContacts(token: String): List<ListContacts> {

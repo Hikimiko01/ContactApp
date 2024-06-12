@@ -76,7 +76,7 @@ class SignupActivity : AppCompatActivity() {
 
                         AlertDialog.Builder(this).apply {
                             setTitle("Yeah!")
-                            setMessage("Akun dengan $email sudah jadi nih. Yuk, login dan mulai stalking!")
+                            setMessage("Akun dengan $email sudah jadi nih. Yuk, login dan simpan kontakmu!")
                             setPositiveButton("Lanjut") { _, _ ->
                                 val intent = Intent(context, LoginActivity::class.java)
                                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
@@ -90,9 +90,7 @@ class SignupActivity : AppCompatActivity() {
                         AlertDialog.Builder(this).apply {
                             setTitle("Ups!")
                             setMessage(getString(R.string.registered_email))
-                            setPositiveButton("Kembali") { _, _ ->
-                                // Nothing here
-                            }
+                            setPositiveButton("Kembali") { _, _ -> }
                             create()
                             show()
                         }
@@ -102,10 +100,8 @@ class SignupActivity : AppCompatActivity() {
                 binding.loadingProgressBar.visibility = View.GONE
                 AlertDialog.Builder(this).apply {
                     setTitle("Ups!")
-                    setMessage("Ada yang belum kamu isi nih, yuk di cek lagi!")
-                    setPositiveButton("Kembali") { _, _ ->
-                        // Nothing here
-                    }
+                    setMessage(getString(R.string.field_not_filled))
+                    setPositiveButton("Kembali") { _, _ -> }
                     create()
                     show()
                 }

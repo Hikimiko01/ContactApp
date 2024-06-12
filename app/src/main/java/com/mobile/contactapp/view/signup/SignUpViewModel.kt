@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mobile.contactapp.data.api.response.RegisterResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -25,7 +26,7 @@ class SignUpViewModel(private val repository: com.mobile.contactapp.data.UserRep
                 e.printStackTrace()
                 withContext(Dispatchers.Main) {
                     callback(
-                        com.mobile.contactapp.data.api.response.RegisterResponse(
+                        RegisterResponse(
                             error = true,
                             message = e.localizedMessage
                         )

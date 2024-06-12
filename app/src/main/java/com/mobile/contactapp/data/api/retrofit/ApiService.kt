@@ -4,7 +4,6 @@ import com.mobile.contactapp.data.api.response.AddContactResponse
 import com.mobile.contactapp.data.api.response.DeleteContactResponse
 import com.mobile.contactapp.data.api.response.GetContactsResponse
 import com.mobile.contactapp.data.api.response.LoginResponse
-import com.mobile.contactapp.data.api.response.LogoutResponse
 import com.mobile.contactapp.data.api.response.PostContactResponse
 import com.mobile.contactapp.data.api.response.PutContactResponse
 import com.mobile.contactapp.data.api.response.RegisterResponse
@@ -24,7 +23,7 @@ interface ApiService {
     @FormUrlEncoded
     @POST("auth/register")
     suspend fun register(
-        @Field("name") name: String,
+        @Field("username") username: String,
         @Field("email") email: String,
         @Field("password") password: String
     ): RegisterResponse
@@ -35,10 +34,6 @@ interface ApiService {
         @Field("username") username: String,
         @Field("password") password: String
     ): LoginResponse
-
-    @FormUrlEncoded
-    @GET("auth/logout")
-    suspend fun logout() : LogoutResponse
 
     @GET("contact")
     suspend fun getContacts() : GetContactsResponse
