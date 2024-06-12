@@ -11,11 +11,12 @@ import android.view.WindowManager
 import android.widget.PopupWindow
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mobile.contactapp.R
+import com.mobile.contactapp.data.pref.Contact
+import com.mobile.contactapp.data.pref.ContactItem
 import com.mobile.contactapp.databinding.ActivityMainBinding
 import com.mobile.contactapp.databinding.AddContactBinding
 import com.mobile.contactapp.view.ViewModelFactory
@@ -112,17 +113,17 @@ class MainActivity : AppCompatActivity() {
             popupWindow.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.rounded_corner))
             popupWindow.showAtLocation(binding.root, Gravity.CENTER, 0, 0)
 
+            val emailEditText = popupBinding.edAddEmail
+            val emailInputLayout = popupBinding.emailEditTextLayout
+            emailInputLayout.setEditText(emailEditText)
+
             popupBinding.addBtn.setOnClickListener {
-                // Testing ajah
                 val firstName = popupBinding.edAddFirstName.text.toString()
                 val lastName = popupBinding.edAddLastName.text.toString()
-                val phoneNumber = popupBinding.edAddPhoneNumber.text.toString()
+                val phoneNumber = popupBinding.edAddPhoneNumber.text.toString().toLong()
                 val email = popupBinding.edAddEmail.text.toString()
 
-                Log.d("PopupWindow", "First Name: $firstName")
-                Log.d("PopupWindow", "Last Name: $lastName")
-                Log.d("PopupWindow", "Phone Number: $phoneNumber")
-                Log.d("PopupWindow", "Email: $email")
+                viewModel.addContact(Contact(kontak = ContactItem(firstName, lastName, email, phoneNumber)))
 
                 popupWindow.dismiss()
                 viewModel.getSession().observe(this) { user ->

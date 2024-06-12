@@ -8,6 +8,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.mobile.contactapp.data.UserRepository
 import com.mobile.contactapp.data.api.response.ListContacts
+import com.mobile.contactapp.data.pref.Contact
 import com.mobile.contactapp.data.pref.UserModel
 import kotlinx.coroutines.launch
 
@@ -18,6 +19,18 @@ class MainViewModel(private val repository: UserRepository) : ViewModel() {
 
     fun getSession(): LiveData<UserModel> {
         return repository.getSession().asLiveData()
+    }
+
+    fun addContact(kontak: Contact){
+        viewModelScope.launch {
+            try {
+                repository.addContact(kontak)
+                val updatedContacts = repository.getContacts(repository.getSession().asLiveData().value?.token ?: "")
+                _contacts.value = updatedContacts
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 
     fun getContacts(token: String){

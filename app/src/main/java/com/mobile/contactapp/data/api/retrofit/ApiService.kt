@@ -4,19 +4,16 @@ import com.mobile.contactapp.data.api.response.AddContactResponse
 import com.mobile.contactapp.data.api.response.DeleteContactResponse
 import com.mobile.contactapp.data.api.response.GetContactsResponse
 import com.mobile.contactapp.data.api.response.LoginResponse
-import com.mobile.contactapp.data.api.response.PostContactResponse
-import com.mobile.contactapp.data.api.response.PutContactResponse
+import com.mobile.contactapp.data.api.response.EditContactResponse
 import com.mobile.contactapp.data.api.response.RegisterResponse
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
+import com.mobile.contactapp.data.pref.Contact
+import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
-import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.PUT
-import retrofit2.http.Part
 import retrofit2.http.Path
 
 interface ApiService {
@@ -39,12 +36,9 @@ interface ApiService {
     suspend fun getContacts() : GetContactsResponse
 
     @POST("contact")
-    suspend fun postContact(
-        @Field("firstName") firstName: String,
-        @Field("lastName") lastName: String?,
-        @Field("email") email: String,
-        @Field("phoneNumber") phoneNumber: Int
-    ) : PostContactResponse
+    suspend fun addContact(
+        @Body kontak: Contact
+    ) : AddContactResponse
 
     @PUT("contact/{id}")
     suspend fun putContacts(
@@ -53,7 +47,7 @@ interface ApiService {
         @Field("lastName") lastName: String?,
         @Field("email") email: String,
         @Field("phoneNumber") phoneNumber: Int
-    ) : PutContactResponse
+    ) : EditContactResponse
 
     @DELETE("contact/{id}")
     suspend fun deleteContact(

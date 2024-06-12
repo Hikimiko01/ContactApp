@@ -1,12 +1,13 @@
 package com.mobile.contactapp.data
 
+import com.mobile.contactapp.data.api.response.AddContactResponse
 import com.mobile.contactapp.data.api.response.DeleteContactResponse
 import com.mobile.contactapp.data.api.response.ListContacts
 import com.mobile.contactapp.data.api.response.LoginResponse
-import com.mobile.contactapp.data.api.response.PostContactResponse
-import com.mobile.contactapp.data.api.response.PutContactResponse
+import com.mobile.contactapp.data.api.response.EditContactResponse
 import com.mobile.contactapp.data.api.response.RegisterResponse
 import com.mobile.contactapp.data.api.retrofit.ApiService
+import com.mobile.contactapp.data.pref.Contact
 import com.mobile.contactapp.data.pref.UserModel
 import com.mobile.contactapp.data.pref.UserPreference
 import kotlinx.coroutines.flow.Flow
@@ -41,13 +42,10 @@ class UserRepository private constructor(
         return apiService.getContacts().contacts
     }
 
-    suspend fun postContact(
-        firstName: String,
-        lastName: String,
-        email: String,
-        phoneNumber: Int
-    ): PostContactResponse {
-        return apiService.postContact(firstName, lastName, email, phoneNumber)
+    suspend fun addContact(
+        kontak: Contact
+    ): AddContactResponse {
+        return apiService.addContact(kontak)
     }
 
     suspend fun editContact(
@@ -56,7 +54,7 @@ class UserRepository private constructor(
         lastName: String,
         email: String,
         phoneNumber: Int
-    ): PutContactResponse  {
+    ): EditContactResponse  {
         return apiService.putContacts(id, firstName, lastName, email, phoneNumber)
     }
 
