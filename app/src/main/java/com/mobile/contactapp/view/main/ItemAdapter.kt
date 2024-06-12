@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.PopupWindow
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.DiffUtil
@@ -74,14 +75,30 @@ class ItemAdapter (
             popupBinding.addBtn.setOnClickListener {
                 val firstName = popupBinding.edAddFirstName.text.toString()
                 val lastName = popupBinding.edAddLastName.text.toString()
-                val phoneNumber = popupBinding.edAddPhoneNumber.text.toString().toLong()
+                val phoneNumberInput = popupBinding.edAddPhoneNumber.text.toString()
                 val email = popupBinding.edAddEmail.text.toString()
 
-                viewModel.editContact(contact.id, Contact(kontak = ContactItem(firstName, lastName, email, phoneNumber)))
+                if (firstName == "" || email == "" || phoneNumberInput == "") {
+                    AlertDialog.Builder(binding.root.context).apply {
+                        val notFilled = when {
+                            firstName.isEmpty() -> "Nama depan"
+                            phoneNumberInput.isEmpty() -> "Nomor telepon"
+                            else -> "Email"
+                        }
+                        setTitle("Ups!")
+                        setMessage(binding.root.context.getString(R.string.not_filled_required, notFilled))
+                        setPositiveButton("Kembali") { _, _ -> }
+                        create()
+                        show()
+                    }
+                } else {
+                    val phoneNumber = popupBinding.edAddPhoneNumber.text.toString().toLong()
+                    viewModel.editContact(contact.id, Contact(kontak = ContactItem(firstName, lastName, email, phoneNumber)))
 
-                popupWindow.dismiss()
-                viewModel.getSession().observe(lifecycleOwner) { user ->
-                    mainActivity.loadContact(user.token)
+                    popupWindow.dismiss()
+                    viewModel.getSession().observe(lifecycleOwner) { user ->
+                        mainActivity.loadContact(user.token)
+                    }
                 }
             }
         }

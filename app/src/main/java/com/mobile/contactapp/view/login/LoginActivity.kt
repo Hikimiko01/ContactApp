@@ -33,7 +33,6 @@ class LoginActivity : AppCompatActivity() {
         setupAction()
         playAnimation()
         setupTextWatchers()
-
     }
 
     private fun setupTextWatchers(){
@@ -41,7 +40,6 @@ class LoginActivity : AppCompatActivity() {
         val passwordEditText = binding.edLoginPassword
         val passwordInputLayout = binding.passwordEditTextLayout
         passwordInputLayout.setEditText(passwordEditText)
-
     }
 
     private fun setupView() {
@@ -59,18 +57,18 @@ class LoginActivity : AppCompatActivity() {
 
     private fun setupAction() {
         binding.loginButton.setOnClickListener {
-            val email = binding.edLoginEmail.text.toString()
+            val username = binding.edLoginUsername.text.toString()
             val password = binding.edLoginPassword.text.toString()
 
             binding.loadingProgressBar.visibility = View.VISIBLE
 
-            if (email.isNotEmpty() && password.isNotEmpty()) {
-                viewModel.login(email, password) { response ->
+            if (username.isNotEmpty() && password.isNotEmpty()) {
+                viewModel.login(username, password) { response ->
                     // Menghilangkan progress bar ketika menerima respon
                     binding.loadingProgressBar.visibility = View.GONE
 
                     if (response.error == false) {
-                        viewModel.saveSession(UserModel(email, response.token ?: ""))
+                        viewModel.saveSession(UserModel(username, response.token ?: ""))
                         AlertDialog.Builder(this).apply {
                             setTitle("Yeah!")
                             setMessage(getString(R.string.login_success))

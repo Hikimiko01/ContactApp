@@ -107,6 +107,11 @@ class SignupActivity : AppCompatActivity() {
                 }
             }
         }
+
+        binding.clickableLoginTv.setOnClickListener {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun playAnimation() {
@@ -130,6 +135,8 @@ class SignupActivity : AppCompatActivity() {
         val passwordEditTextLayout =
             ObjectAnimator.ofFloat(binding.passwordEditTextLayout, View.ALPHA, 1f).setDuration(100)
         val signup = ObjectAnimator.ofFloat(binding.signupButton, View.ALPHA, 1f).setDuration(100)
+        val loginTV = ObjectAnimator.ofFloat(binding.loginTv, View.ALPHA, 1f).setDuration(100)
+        val loginBtnTV = ObjectAnimator.ofFloat(binding.clickableLoginTv, View.ALPHA, 1f).setDuration(100)
 
 
         AnimatorSet().apply {
@@ -141,7 +148,9 @@ class SignupActivity : AppCompatActivity() {
                 emailEditTextLayout,
                 passwordTextView,
                 passwordEditTextLayout,
-                signup
+                signup,
+                loginTV,
+                loginBtnTV
             )
             startDelay = 100
         }.start()

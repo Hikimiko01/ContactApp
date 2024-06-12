@@ -10,6 +10,7 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.PopupWindow
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
@@ -19,7 +20,6 @@ import com.mobile.contactapp.data.pref.Contact
 import com.mobile.contactapp.data.pref.ContactItem
 import com.mobile.contactapp.databinding.ActivityMainBinding
 import com.mobile.contactapp.databinding.AddContactBinding
-import com.mobile.contactapp.databinding.EditContactBinding
 import com.mobile.contactapp.view.ViewModelFactory
 import com.mobile.contactapp.view.login.LoginActivity
 import kotlinx.coroutines.launch
@@ -121,14 +121,31 @@ class MainActivity : AppCompatActivity() {
             popupBinding.addBtn.setOnClickListener {
                 val firstName = popupBinding.edAddFirstName.text.toString()
                 val lastName = popupBinding.edAddLastName.text.toString()
-                val phoneNumber = popupBinding.edAddPhoneNumber.text.toString().toLong()
                 val email = popupBinding.edAddEmail.text.toString()
+                val phoneNumberInput = popupBinding.edAddPhoneNumber.text.toString()
 
-                viewModel.addContact(Contact(kontak = ContactItem(firstName, lastName, email, phoneNumber)))
+                if (firstName == "" || email == "" || phoneNumberInput == "") {
+                    AlertDialog.Builder(this).apply {
+                        val notFilled = when {
+                            firstName.isEmpty() -> "Nama depan"
+                            phoneNumberInput.isEmpty() -> "Nomor telepon"
+                            else -> "Email"
+                        }
 
-                popupWindow.dismiss()
-                viewModel.getSession().observe(this) { user ->
-                    loadContact(user.token)
+                        setTitle("Ups!")
+                        setMessage(getString(R.string.not_filled_required, notFilled))
+                        setPositiveButton("Kembali") { _, _ -> }
+                        create()
+                        show()
+                    }
+                } else {
+                    val phoneNumber = popupBinding.edAddPhoneNumber.text.toString().toLong()
+                    viewModel.addContact(Contact(kontak = ContactItem(firstName, lastName, email, phoneNumber)))
+
+                    popupWindow.dismiss()
+                    viewModel.getSession().observe(this) { user ->
+                        loadContact(user.token)
+                    }
                 }
             }
         }

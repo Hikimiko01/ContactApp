@@ -81,7 +81,7 @@
         tools:alpha="100">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/ed_login_email"
+            android:id="@+id/ed_login_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
