@@ -50,7 +50,7 @@ class UserRepository private constructor(
         return apiService.postContact(firstName, lastName, email, phoneNumber)
     }
 
-    suspend fun putContact(
+    suspend fun editContact(
         id: String,
         firstName: String,
         lastName: String,

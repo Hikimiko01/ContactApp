@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
-        itemAdapter = ItemAdapter()
+        itemAdapter = ItemAdapter(viewModel)
         binding.rvStory.layoutManager = LinearLayoutManager(this)
         binding.rvStory.adapter = itemAdapter
     }
@@ -125,6 +125,9 @@ class MainActivity : AppCompatActivity() {
                 Log.d("PopupWindow", "Email: $email")
 
                 popupWindow.dismiss()
+                viewModel.getSession().observe(this) { user ->
+                    loadContact(user.token)
+                }
             }
         }
     }

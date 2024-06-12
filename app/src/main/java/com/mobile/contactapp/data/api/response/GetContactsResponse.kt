@@ -16,7 +16,7 @@ data class GetContactsResponse(
 
 data class ListContacts(
 
-	@field:SerializedName("id")
+	@field:SerializedName("_id")
 	val id: String,
 
 	@field:SerializedName("firstName")
