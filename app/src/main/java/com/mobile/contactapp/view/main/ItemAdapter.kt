@@ -9,6 +9,7 @@ import android.widget.PopupWindow
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -19,6 +20,7 @@ import com.mobile.contactapp.data.pref.Contact
 import com.mobile.contactapp.data.pref.ContactItem
 import com.mobile.contactapp.databinding.EditContactBinding
 import com.mobile.contactapp.databinding.StoryCardBinding
+import kotlinx.coroutines.launch
 
 class ItemAdapter (
     private val viewModel: MainViewModel,
@@ -65,7 +67,9 @@ class ItemAdapter (
                 true
             )
 
-            popupWindow.setBackgroundDrawable(ContextCompat.getDrawable(binding.root.context, R.drawable.rounded_corner))
+            popupWindow.setBackgroundDrawable(ContextCompat.getDrawable(binding.root.context, R.drawable.rounded_corner
+            ))
+
             popupWindow.showAtLocation(binding.root, Gravity.CENTER, 0, 0)
 
             val emailEditText = popupBinding.edAddEmail
@@ -78,11 +82,11 @@ class ItemAdapter (
                 val phoneNumberInput = popupBinding.edAddPhoneNumber.text.toString()
                 val email = popupBinding.edAddEmail.text.toString()
 
-                if (firstName == "" || email == "" || phoneNumberInput == "") {
+                if (firstName.isBlank() || email.isBlank() || phoneNumberInput.isBlank()) {
                     AlertDialog.Builder(binding.root.context).apply {
                         val notFilled = when {
-                            firstName.isEmpty() -> "Nama depan"
-                            phoneNumberInput.isEmpty() -> "Nomor telepon"
+                            firstName.isBlank() -> "Nama depan"
+                            phoneNumberInput.isBlank() -> "Nomor telepon"
                             else -> "Email"
                         }
                         setTitle("Ups!")
@@ -92,12 +96,24 @@ class ItemAdapter (
                         show()
                     }
                 } else {
-                    val phoneNumber = popupBinding.edAddPhoneNumber.text.toString().toLong()
-                    viewModel.editContact(contact.id, Contact(kontak = ContactItem(firstName, lastName, email, phoneNumber)))
+                    try {
+                        val phoneNumber = phoneNumberInput.toLong()
+                        viewModel.editContact(contact.id, Contact(kontak = ContactItem(firstName, lastName, email, phoneNumber)))
 
-                    popupWindow.dismiss()
-                    viewModel.getSession().observe(lifecycleOwner) { user ->
-                        mainActivity.loadContact(user.token)
+                        popupWindow.dismiss()
+                        lifecycleOwner.lifecycleScope.launch {
+                            viewModel.getSession().observe(lifecycleOwner) { user ->
+                                mainActivity.loadContact(user.token)
+                            }
+                        }
+                    } catch (e: NumberFormatException) {
+                        AlertDialog.Builder(binding.root.context).apply {
+                            setTitle("Ups!")
+                            setMessage("Nomor telepon harus berupa angka")
+                            setPositiveButton("Kembali") { _, _ -> }
+                            create()
+                            show()
+                        }
                     }
                 }
             }
@@ -115,5 +131,4 @@ class ItemAdapter (
             }
         }
     }
-
 }

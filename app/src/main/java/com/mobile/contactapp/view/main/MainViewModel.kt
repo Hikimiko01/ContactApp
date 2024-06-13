@@ -11,17 +11,21 @@ import com.mobile.contactapp.data.api.response.ListContacts
 import com.mobile.contactapp.data.pref.Contact
 import com.mobile.contactapp.data.pref.UserModel
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 
 class MainViewModel(private val repository: UserRepository) : ViewModel() {
 
     private val _contacts = MutableLiveData<List<ListContacts>>()
     val contacts: LiveData<List<ListContacts>> = _contacts
 
+    private val _error = MutableLiveData<String>()
+    val error: LiveData<String> = _error
+
     fun getSession(): LiveData<UserModel> {
         return repository.getSession().asLiveData()
     }
 
-    fun addContact(kontak: Contact){
+    fun addContact(kontak: Contact) {
         viewModelScope.launch {
             try {
                 repository.addContact(kontak)
@@ -29,19 +33,29 @@ class MainViewModel(private val repository: UserRepository) : ViewModel() {
                 _contacts.value = updatedContacts
             } catch (e: Exception) {
                 e.printStackTrace()
+                _error.value = "Error adding contact: ${e.message}"
             }
         }
     }
 
-    fun getContacts(token: String){
+    fun getContacts(token: String) {
         viewModelScope.launch {
             try {
                 val contacts = repository.getContacts(token)
                 Log.d("MainViewModel", "Fetched contacts: $contacts")
                 _contacts.value = contacts
+            } catch (e: HttpException) {
+                if (e.code() == 401) {
+                    Log.e("MainViewModel", "Unauthorized: ${e.message()}")
+                    _error.value = "Unauthorized"
+                } else {
+                    Log.e("MainViewModel", "Error fetching contacts: ${e.message()}")
+                    _error.value = "Error fetching contacts: ${e.message()}"
+                }
             } catch (e: Exception) {
                 Log.e("MainViewModel", "Error fetching contacts", e)
                 _contacts.value = emptyList()
+                _error.value = "Error fetching contacts: ${e.message}"
             }
         }
     }
@@ -55,6 +69,7 @@ class MainViewModel(private val repository: UserRepository) : ViewModel() {
                 _contacts.value = updatedContacts
             } catch (e: Exception) {
                 e.printStackTrace()
+                _error.value = "Error deleting contact: ${e.message}"
             }
         }
     }
@@ -68,6 +83,7 @@ class MainViewModel(private val repository: UserRepository) : ViewModel() {
                 _contacts.value = updatedContacts
             } catch (e: Exception) {
                 e.printStackTrace()
+                _error.value = "Error editing contact: ${e.message}"
             }
         }
     }
@@ -77,5 +93,4 @@ class MainViewModel(private val repository: UserRepository) : ViewModel() {
             repository.logout()
         }
     }
-
 }
