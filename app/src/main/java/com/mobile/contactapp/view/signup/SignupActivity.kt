@@ -15,6 +15,7 @@ import com.mobile.contactapp.R
 import com.mobile.contactapp.databinding.ActivitySignupBinding
 import com.mobile.contactapp.view.ViewModelFactory
 import com.mobile.contactapp.view.login.LoginActivity
+import java.net.SocketTimeoutException
 
 class SignupActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupBinding

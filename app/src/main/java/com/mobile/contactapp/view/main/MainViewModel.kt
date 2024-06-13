@@ -21,6 +21,9 @@ class MainViewModel(private val repository: UserRepository) : ViewModel() {
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> = _error
 
+    private val _success = MutableLiveData<Boolean>()
+    val success: LiveData<Boolean> = _success
+
     fun getSession(): LiveData<UserModel> {
         return repository.getSession().asLiveData()
     }
@@ -31,8 +34,10 @@ class MainViewModel(private val repository: UserRepository) : ViewModel() {
                 repository.addContact(kontak)
                 val updatedContacts = repository.getContacts(repository.getSession().asLiveData().value?.token ?: "")
                 _contacts.value = updatedContacts
+                _success.value = true
             } catch (e: Exception) {
                 e.printStackTrace()
+                _success.value = false
                 _error.value = "Error adding contact: ${e.message}"
             }
         }
@@ -67,8 +72,10 @@ class MainViewModel(private val repository: UserRepository) : ViewModel() {
                 repository.deleteContact(id)
                 val updatedContacts = repository.getContacts(repository.getSession().asLiveData().value?.token ?: "")
                 _contacts.value = updatedContacts
+                _success.value = true
             } catch (e: Exception) {
                 e.printStackTrace()
+                _success.value = false
                 _error.value = "Error deleting contact: ${e.message}"
             }
         }

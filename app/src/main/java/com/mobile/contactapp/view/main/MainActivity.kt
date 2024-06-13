@@ -13,10 +13,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mobile.contactapp.R
 import com.mobile.contactapp.data.pref.Contact
@@ -25,7 +22,6 @@ import com.mobile.contactapp.databinding.ActivityMainBinding
 import com.mobile.contactapp.databinding.AddContactBinding
 import com.mobile.contactapp.view.ViewModelFactory
 import com.mobile.contactapp.view.login.LoginActivity
-import kotlinx.coroutines.launch
 
 
 class MainActivity : AppCompatActivity() {
@@ -45,33 +41,20 @@ class MainActivity : AppCompatActivity() {
         setupRecyclerView()
         setupViewModel()
         setupAction()
-        setupZeroContactCardButtons() // Setup Yes/No Buttons moved here
+        setupZeroContactCardButtons()
 
-        // Setup FAB click listener
         binding.fabAddContact.setOnClickListener {
             addContactPopUp()
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.getSession().observe(this) { user ->
-            if (user.isLogin) {
-                loadContact(user.token)
-            } else {
-                startActivity(Intent(this, LoginActivity::class.java))
-                finish()
-            }
-        }
-    }
-
-    internal fun loadContact(token: String) {
+    fun loadContact(token: String) {
         binding.loadingProgressBar.visibility = View.VISIBLE
         viewModel.getContacts(token)
     }
 
+    @Suppress("DEPRECATION")
     private fun setupView() {
-        // Adjust window insets and hide action bar
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             window.insetsController?.hide(WindowInsets.Type.statusBars())
         } else {
@@ -101,12 +84,10 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // Observe contacts changes
         viewModel.contacts.observe(this) { contacts ->
             itemAdapter.submitList(contacts)
             binding.loadingProgressBar.visibility = View.GONE
 
-            // Show/hide zero contact card based on contacts list
             if (contacts.isEmpty()) {
                 binding.zeroContactCard.visibility = View.VISIBLE
             } else {
@@ -148,7 +129,10 @@ class MainActivity : AppCompatActivity() {
         popupWindow.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.rounded_corner))
         popupWindow.showAtLocation(binding.root, Gravity.CENTER, 0, 0)
 
-        // Set up add button click listener
+        val emailEditText = popupBinding.edAddEmail
+        val emailInputLayout = popupBinding.emailEditTextLayout
+        emailInputLayout.setEditText(emailEditText)
+
         popupBinding.addBtn.setOnClickListener {
             val firstName = popupBinding.edAddFirstName.text.toString()
             val lastName = popupBinding.edAddLastName.text.toString()
@@ -170,21 +154,18 @@ class MainActivity : AppCompatActivity() {
                     show()
                 }
             } else {
-                try {
-                    val phoneNumber = phoneNumberInput.toLong()
-                    viewModel.addContact(Contact(kontak = ContactItem(firstName, lastName, email, phoneNumber)))
-
-                    // Dismiss popup after adding contact
-                    popupWindow.dismiss()
-                } catch (e: NumberFormatException) {
-                    AlertDialog.Builder(this).apply {
-                        setTitle("Ups!")
-                        setMessage("Nomor telepon harus berupa angka")
-                        setPositiveButton("Kembali") { _, _ -> }
-                        create()
-                        show()
+                val phoneNumber = phoneNumberInput.toLong()
+                viewModel.addContact(Contact(kontak = ContactItem(firstName, lastName, email, phoneNumber)))
+                viewModel.success.observe(this) { isSuccess ->
+                    if (isSuccess) {
+                        Toast.makeText(this,
+                            getString(R.string.add_contact_success), Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(this,
+                            getString(R.string.add_contact_failed), Toast.LENGTH_SHORT).show()
                     }
                 }
+                popupWindow.dismiss()
             }
         }
 
@@ -198,15 +179,12 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun setupZeroContactCardButtons() {
-        // Setup Yes/No buttons in zero contact card
-        val yesButton: Button = findViewById(R.id.btn_yes)
-        val noButton: Button = findViewById(R.id.btn_no)
 
-        yesButton.setOnClickListener {
+        binding.btnYes.setOnClickListener {
             addContactPopUp()
         }
 
-        noButton.setOnClickListener {
+        binding.btnNo.setOnClickListener {
             binding.zeroContactCard.visibility = View.GONE
         }
     }

@@ -17,6 +17,7 @@ import com.mobile.contactapp.databinding.ActivityLoginBinding
 import com.mobile.contactapp.view.ViewModelFactory
 import com.mobile.contactapp.view.main.MainActivity
 import com.mobile.contactapp.view.signup.SignupActivity
+import java.net.SocketTimeoutException
 
 class LoginActivity : AppCompatActivity() {
     private val viewModel by viewModels<LoginViewModel> {
@@ -82,29 +83,12 @@ class LoginActivity : AppCompatActivity() {
                             show()
                         }
                     } else {
-                        AlertDialog.Builder(this).apply {
-                            setTitle("Ups!")
-                            setMessage(getString(R.string.acc_not_found))
-                            setPositiveButton("Daftar") { _, _ ->
-                                val intent = Intent(context, SignupActivity::class.java)
-                                startActivity(intent)
-                                finish()
-                            }
-                            create()
-                            show()
-                        }
+                        showAlertDialog("Ups!", getString(R.string.wrong_account_details))
                     }
                 }
             } else {
-
                 binding.loadingProgressBar.visibility = View.GONE
-                AlertDialog.Builder(this).apply {
-                    setTitle("Ups!")
-                    setMessage(getString(R.string.field_not_filled))
-                    setPositiveButton("Kembali") { _, _ -> }
-                    create()
-                    show()
-                }
+                showAlertDialog("Ups!", getString(R.string.field_not_filled))
             }
         }
 
@@ -150,6 +134,16 @@ class LoginActivity : AppCompatActivity() {
             )
             startDelay = 100
         }.start()
+    }
+
+    private fun showAlertDialog(title: String, message: String) {
+        AlertDialog.Builder(this).apply {
+            setTitle(title)
+            setMessage(message)
+            setPositiveButton("Kembali") { _, _ -> }
+            create()
+            show()
+        }
     }
 
 }

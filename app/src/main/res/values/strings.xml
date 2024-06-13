@@ -40,4 +40,7 @@
     <string name="has_account">Sudah punya akun?</string>
     <string name="belum_terdapat_kontak_yang_disimpan">Belum terdapat kontak yang disimpan \nApakah Anda ingin mulai menambahkan kontak?</string>
     <string name="not_filled_required">%1$s belum kamu isi</string>
+    <string name="wrong_account_details">Password atau username salah atau mungkin akun kamu belum terdaftar</string>
+    <string name="add_contact_success">Berhasil menambahkan kontak</string>
+    <string name="add_contact_failed">Gagal menambahkan kontak</string>
 </resources>

@@ -1,11 +1,13 @@
 package com.mobile.contactapp.view.main
 
+import android.content.Context
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.PopupWindow
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
@@ -43,9 +45,11 @@ class ItemAdapter (
             binding.tvItemName.text = binding.root.context.getString(R.string.contacts_name, contact.firstName, contact.lastName)
             binding.tvItemPhoneNum.text = binding.root.context.getString(R.string.contacts_phoneNum, contact.phoneNumber.toString())
             binding.tvItemEmail.text = binding.root.context.getString(R.string.contacts_email, contact.email)
+
             binding.contactsEditBtn.setOnClickListener {
                 editContactPopUp(contact)
             }
+
             binding.contactsDeleteBtn.setOnClickListener {
                 viewModel.deleteContact(contact.id)
             }
@@ -67,9 +71,7 @@ class ItemAdapter (
                 true
             )
 
-            popupWindow.setBackgroundDrawable(ContextCompat.getDrawable(binding.root.context, R.drawable.rounded_corner
-            ))
-
+            popupWindow.setBackgroundDrawable(ContextCompat.getDrawable(binding.root.context, R.drawable.rounded_corner))
             popupWindow.showAtLocation(binding.root, Gravity.CENTER, 0, 0)
 
             val emailEditText = popupBinding.edAddEmail
@@ -96,23 +98,13 @@ class ItemAdapter (
                         show()
                     }
                 } else {
-                    try {
-                        val phoneNumber = phoneNumberInput.toLong()
-                        viewModel.editContact(contact.id, Contact(kontak = ContactItem(firstName, lastName, email, phoneNumber)))
+                    val phoneNumber = phoneNumberInput.toLong()
+                    viewModel.editContact(contact.id, Contact(kontak = ContactItem(firstName, lastName, email, phoneNumber)))
 
-                        popupWindow.dismiss()
-                        lifecycleOwner.lifecycleScope.launch {
-                            viewModel.getSession().observe(lifecycleOwner) { user ->
-                                mainActivity.loadContact(user.token)
-                            }
-                        }
-                    } catch (e: NumberFormatException) {
-                        AlertDialog.Builder(binding.root.context).apply {
-                            setTitle("Ups!")
-                            setMessage("Nomor telepon harus berupa angka")
-                            setPositiveButton("Kembali") { _, _ -> }
-                            create()
-                            show()
+                    popupWindow.dismiss()
+                    lifecycleOwner.lifecycleScope.launch {
+                        viewModel.getSession().observe(lifecycleOwner) { user ->
+                            mainActivity.loadContact(user.token)
                         }
                     }
                 }
